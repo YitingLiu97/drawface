@@ -40,11 +40,6 @@ let patternCtx = patternCanvas.getContext("2d");
 let bgCanvas = document.getElementById("bgCanvas");
 let bgCtx = bgCanvas.getContext("2d");
 
-//final canvas to be saved 
-// let finalCanvas = document.getElementById("finalCanvas");
-// let finalCtx = finalCanvas.getContext("2d");
-
-
 let one = document.getElementById("one"); //soft
 let two = document.getElementById("two"); //bold
 let three = document.getElementById("three"); //blah
@@ -52,6 +47,7 @@ let pixel = document.getElementById("pixel");
 let pixelBtn = document.getElementById("pixelBtn");
 let pixelSlider = document.getElementById("pixelSlider");
 let time;
+let state = "";
 let colors = document.getElementById("colors");
 let diffTime = 0;
 let clear = document.getElementById("clear");
@@ -59,12 +55,23 @@ let clear = document.getElementById("clear");
 pixelBtn.addEventListener("click", togglePixel); //show hide it when other buttons are clicked 
 
 function togglePixel() {
+  
+    console.log("clicked on slider")
+    state ="pixel";
+
     if (pixelSlider.style.display === "none") {
         pixelSlider.style.display = "block";
     } else {
         pixelSlider.style.display = "none";
     }
 }
+
+window.addEventListener("click",function(){
+    if(state!="pixel"){
+        pixelSlider.style.display = "none";
+     }
+})
+
 //how to keep the drawing without clearing it? - for the pattern canvas 
 let pixelRatio = 1;
 
@@ -84,8 +91,6 @@ function updateSliderVal() {
 }
 
 pixelSlider.addEventListener("change", updateSliderVal);
-
-let state = "";
 let bg = document.getElementById("bg");
 
 let urls = ["/assets/patterns_circle.png", "/assets/patterns_dots.png", "/assets/patterns_fill square.png", "/assets/patterns_spiral.png", "/assets/patterns_square.png", "/assets/patterns_x.png"];
@@ -98,11 +103,10 @@ let bgImages = urls.map((url) => {
 
 bgImages[0].addEventListener("load", render);
 
-
 bg.addEventListener("click", function () {
     index = (bgImages.length + index + 1) % bgImages.length;
     render();
-   
+
 });
 
 function render() {
@@ -121,9 +125,9 @@ function render() {
     let image = bgImages[index];
     //how to make the pattern smaller - same as the pixel ratio?
     var pattern = patternCtx.createPattern(image, 'repeat');
-    patternCtx.fillStyle = pattern;
-    //add the patterns onto pattern canvas
-    patternCtx.fillRect(0, 0, patternCanvas.width, patternCanvas.height);
+
+    ctx.fillStyle = pattern;
+    ctx.fillRect(0, 0, patternCanvas.width, patternCanvas.height);
 
 }
 
@@ -155,7 +159,7 @@ clear.addEventListener("click", function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     patternCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height)
     bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height)
-    
+
 
 })
 let penDown = false;
@@ -189,21 +193,20 @@ colors.addEventListener("click", function () {
     state = "colors";
     if (state === "colors") {
 
-        // bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
         bgCtx.fillStyle = `hsl(${Math.random()*255}, 80%, 50%)`;
+        console.log(bgCtx.fillStyle)
         bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-        ctx.drawImage(bgCanvas,0,0);
+
     }
 });
 
 download.addEventListener("click", function () {
     state = "download";
-    console.log("download!"); 
-    // patternCtx.drawImage(bgCanvas,0,0)   
-
-
-    ctx.drawImage(bgCanvas,0,0)
-    canvas.toBlob(function (blob) {
+    console.log("download!");
+    //draw everything onto the bg image and save it 
+    bgCtx.drawImage(canvas, 0, 0)
+    bgCanvas.toBlob(function (blob) {
         saveAs(blob, "emojiDrawing.png");
     });
 })

@@ -7,45 +7,57 @@
     <title>Draw a Face</title>
     <meta name=“description” content="draw a face with the app and share with friends.">
     <link rel="stylesheet" href="/src/style.css">
+    <link href="./assets/favicon.ico" rel="icon" type="image/x-icon" />
+
+    <title>Draw A Face</title>
+    <meta name="keywords" content="pattern, draw, brush, mobile, game, art, web">
+    <meta name="author" content="Yiting Liu">
+    <meta property="og:url" content="https://drawface.netlify.app/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Draw with Emojis" />
+    <meta property="og:description" content="Have fun with your emoji drawing tool!" />
+    <meta property="og:image" content="https://emojidraw.netlify.app/assets/emojidraw_4.png" />
+    <meta property="og:image:width" content="400" />
+    <meta property="og:image:height" content="300" />
+
+
+
 </head>
 
-<body>   <!-- bg color -->
-    <canvas id="bgCanvas"></canvas>
-    <!-- pattern-->
-<canvas id="patternCanvas"></canvas>
+<body>
 
- 
+    <!-- bg color -->
+    <canvas id="bgCanvas" style="z-index:-2;"></canvas>
+    <!-- pattern-->
+    <canvas id="patternCanvas"></canvas>
     <!-- final -->
     <canvas id="canvas"></canvas>
 
-
-    </div>
     <div id="selections">
-        <div id="pixel">
-            <div id="pixelBtn">pixel </div>
-            <input type="range" id="pixelSlider" name="pixel" min="0" max="1.5" step="0.1">
-        </div>
-        <button id="bg">pattern</button>
-        <button id="colors">colors</button>
-        
-        <button id="one">soft</button>
-        <button id="two">bold</button>
-        <button id="three">blah</button>
-        <!-- <button id="col">col</button>
-        <button id="pixel">pixel</button> -->
-       
-        <button id="download">⬇</button>
-        <button id="undo">⬅</button>
-        <button id="clear">❌</button>
 
+        <div id="selections">
+            <div id="pixel">
+                <div id="pixelBtn">pixel </div>
+                <input type="range" id="pixelSlider" name="pixel" min="0.1" max="1.5" step="0.1">
+            </div>
+        <button class="btn" id="bg"> <span> pattern</span></button>
+        <button class="btn" id="colors"> <span> colors </span> </button>
+
+        <button class="btn" id="one"> <span>soft </span> </button>
+        <button class="btn" id="two"> <span>bold </span> </button>
+        <button class="btn" id="three"> <span>grow </span> </button>
+        <button class="btn" id="download"> <span>⬇ </span> </button>
+        <button class="btn" id="undo"><span>⬅ </span></button>
+        <button class="btn" id="clear"><span>❌ </span></button>
+
+        <button class="btn">
+            <a target="_blank" href="https://yitingliu.com">
+                <span> 👧 Yiting </span></a></button>
     </div>
-    <div>
 
-
-
-        <script type="module" src="/src/main.js"></script>
-        <script type="module" src="/src/vector.js"></script>
-        <script type="module" src="/src/fileSaver.js"></script>
+    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/vector.js"></script>
+    <script type="module" src="/src/fileSaver.js"></script>
 
 </body>
 
