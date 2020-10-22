@@ -28,19 +28,64 @@ questions:
 **********/
 
 
-
+//final
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
-//create pattern off screen 
-let patternCanvas = document.getElementById("canvas");
-let patternContext = canvas.getContext("2d");
-patternCanvas.width = 50;
-patternCanvas.height = 50;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-let pixelRatio = 1; //remeber to change the brush x and y
+//pattern 
+let patternCanvas = document.getElementById("patternCanvas");
+let patternCtx = patternCanvas.getContext("2d");
 
+//bg color
+let bgCanvas = document.getElementById("bgCanvas");
+let bgCtx = bgCanvas.getContext("2d");
+
+//final canvas to be saved 
+// let finalCanvas = document.getElementById("finalCanvas");
+// let finalCtx = finalCanvas.getContext("2d");
+
+
+let one = document.getElementById("one"); //soft
+let two = document.getElementById("two"); //bold
+let three = document.getElementById("three"); //blah
+let pixel = document.getElementById("pixel");
+let pixelBtn = document.getElementById("pixelBtn");
+let pixelSlider = document.getElementById("pixelSlider");
+let time;
+let colors = document.getElementById("colors");
+let diffTime = 0;
+let clear = document.getElementById("clear");
+
+pixelBtn.addEventListener("click", togglePixel); //show hide it when other buttons are clicked 
+
+function togglePixel() {
+    if (pixelSlider.style.display === "none") {
+        pixelSlider.style.display = "block";
+    } else {
+        pixelSlider.style.display = "none";
+    }
+}
+//how to keep the drawing without clearing it? - for the pattern canvas 
+let pixelRatio = 1;
+
+canvas.width = window.innerWidth * pixelRatio;
+canvas.height = window.innerHeight * pixelRatio;
+bgCanvas.width = window.innerWidth * pixelRatio;
+bgCanvas.height = window.innerHeight * pixelRatio;
+patternCanvas.width = window.innerWidth * pixelRatio;
+patternCanvas.height = window.innerHeight * pixelRatio;
+
+function updateSliderVal() {
+    if (pixelRatio >= 0) {
+        pixelRatio = pixelSlider.value;
+        console.log("value: ", pixelRatio);
+        render();
+    }
+}
+
+pixelSlider.addEventListener("change", updateSliderVal);
+
+let state = "";
 let bg = document.getElementById("bg");
 
 let urls = ["/assets/patterns_circle.png", "/assets/patterns_dots.png", "/assets/patterns_fill square.png", "/assets/patterns_spiral.png", "/assets/patterns_square.png", "/assets/patterns_x.png"];
@@ -52,26 +97,35 @@ let bgImages = urls.map((url) => {
 });
 
 bgImages[0].addEventListener("load", render);
+
+
 bg.addEventListener("click", function () {
     index = (bgImages.length + index + 1) % bgImages.length;
     render();
-
+   
 });
 
 function render() {
-    // patternContext.fillRect(0, 0, patternCanvas.width, patternCanvas.height);
-    // patternContext.fillStyle = `hsl(${Math.random()*255}, 80%, 50%)`;
-    
+    bgCanvas.width = window.innerWidth * pixelRatio;
+    bgCanvas.height = window.innerHeight * pixelRatio;
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+    canvas.width = window.innerWidth * pixelRatio;
+    canvas.height = window.innerHeight * pixelRatio;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    patternCanvas.width = window.innerWidth * pixelRatio;
+    patternCanvas.height = window.innerHeight * pixelRatio;
+    patternCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height);
+
     let image = bgImages[index];
-
-    var pattern = ctx.createPattern(image, 'repeat');
-    ctx.fillStyle = pattern;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+    //how to make the pattern smaller - same as the pixel ratio?
+    var pattern = patternCtx.createPattern(image, 'repeat');
+    patternCtx.fillStyle = pattern;
+    //add the patterns onto pattern canvas
+    patternCtx.fillRect(0, 0, patternCanvas.width, patternCanvas.height);
 
 }
-
 
 let restore = document.getElementById("undo");
 
@@ -97,14 +151,13 @@ function pushState() {
     }
 }
 
-ctx.fillRect(0, 0, patternCanvas.width, patternCanvas.height);
-ctx.fillStyle = `hsl(${Math.random()*255}, 80%, 50%)`;
+clear.addEventListener("click", function () {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    patternCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height)
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height)
+    
 
-//random background when opening 
-
-ctx.strokeStyle = "rgba(0,0,0,0.6)";
-ctx.fillStyle = "rgba(0,0,0,0.6)";
-
+})
 let penDown = false;
 let last_x = 0;
 let last_y = 0;
@@ -113,6 +166,8 @@ function paintStart(x, y) {
     penDown = true;
     last_x = x;
     last_y = y;
+    time = new Date();
+    diffTime = 0;
 }
 
 //start the brush in the center of the shape
@@ -120,25 +175,34 @@ function norm_random(size) {
     return (Math.random() - 0.5) * size;
 }
 
-let state = "";
+one.addEventListener("click", function () {
+    state = "one";
+});
+two.addEventListener("click", function () {
+    state = "two"
+});
 
+three.addEventListener("click", function () {
+    state = "three"
+});
+colors.addEventListener("click", function () {
+    state = "colors";
+    if (state === "colors") {
 
-clear.addEventListener("click", function () {
-    state = "clear";
-    if (state === "clear") {
-
-        // ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = `hsl(${Math.random()*255}, 80%, 50%)`;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // ctx.strokeStyle = "rgba(0,0,0,0.6)";
-        // ctx.fillStyle = "rgba(0,0,0,0.6)";
+        // bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+        bgCtx.fillStyle = `hsl(${Math.random()*255}, 80%, 50%)`;
+        bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+        ctx.drawImage(bgCanvas,0,0);
     }
 });
 
 download.addEventListener("click", function () {
     state = "download";
-    console.log("download!");
+    console.log("download!"); 
+    // patternCtx.drawImage(bgCanvas,0,0)   
+
+
+    ctx.drawImage(bgCanvas,0,0)
     canvas.toBlob(function (blob) {
         saveAs(blob, "emojiDrawing.png");
     });
@@ -151,45 +215,60 @@ function paintMove(x, y) {
     let rate = 20;
     let interpolatedPoints = pointsAlongLine(x, y, last_x, last_y, rate);
 
+    let lastTime = new Date();
+    diffTime = (lastTime - time) / 10;
 
     //brush 
     //pink circle with contrasty rect in the center 
-    // interpolatedPoints.forEach(function (p) {
+    if (state === "one") {
+        interpolatedPoints.forEach(function (p) {
+            ctx.beginPath();
+            ctx.fillStyle = "rgba(0,0,0,0.8)";
+            ctx.fillRect(p.x + norm_random(10), p.y + norm_random(10), norm_random(20), norm_random(10))
 
-    //     ctx.globalAlpha=0.2;
-
-    //     ctx.beginPath();
-    //     ctx.fillStyle = "rgba(0,0,0,0.7)";
-    //     ctx.fillRect(p.x + norm_random(10), p.y + norm_random(10), norm_random(20), norm_random(10))
-
-    //     ctx.fillStyle = "rgba(255,0,0,0.1)";
-    //     ctx.arc(p.x + norm_random(20), p.y + norm_random(20),Math.abs(norm_random(100)), 0, Math.PI * 2);
-    //     ctx.fill();
-    //     });
-
+            ctx.fillStyle = 'rgba( ' + 255 * Math.floor(diffTime) / 10 + ',' +
+                Math.random() * Math.floor(diffTime) / 2 + ',' + (Math.random() * 255 + Math.floor(diffTime)) + ',' + 0.2 + ')';
+            console.log("difftime:", diffTime);
+            ctx.arc(p.x + norm_random(20), p.y + norm_random(20), Math.abs(norm_random(100)), 0, Math.PI * 2);
+            ctx.fill();
+        });
+    }
     //brush two 
     //vertical lines and pink circles - cherry blossom 
-    interpolatedPoints.forEach(function (p) {
-        ctx.beginPath();
-        ctx.fillStyle = "pink";
-        ctx.arc(p.x + norm_random(10), p.y + norm_random(10), Math.abs(random(15)), Math.PI * norm_random(1), Math.PI * norm_random(2));
-        ctx.fill();
-        ctx.fillStyle = "black";
-        ctx.fillRect(p.x + norm_random(20), p.y + norm_random(10), 2, 10)
+    if (state === "two") {
+        interpolatedPoints.forEach(function (p) {
+            ctx.beginPath();
+            ctx.fillStyle = 'rgb( ' + 255 * Math.floor(diffTime) / 10 + ',' +
+                Math.random() * Math.floor(diffTime) / 5 + ',' + (Math.random() * 255 + Math.floor(diffTime)) + ')';
+            console.log("difftime:", diffTime);
+            ctx.arc(p.x + norm_random(10), p.y + norm_random(10), Math.abs(random(15)), Math.PI * norm_random(1), Math.PI * norm_random(2));
+            ctx.fill();
+            ctx.fillStyle = 'rgb(' + (Math.random() * 255 + Math.floor(diffTime)) + ',' +
+                Math.random() * Math.floor(diffTime) + ',' + 255 * Math.floor(diffTime) / 100 + ')';
+            console.log("difftime:", diffTime);
+            ctx.fillRect(p.x + norm_random(20), p.y + norm_random(10), 2, 10)
 
-    });
-
+        });
+    }
 
     //brush three 
     // animating the circle when it is drawn - revealing the circle rather than drawing? 
     // created soft circles 
-    // interpolatedPoints.forEach(function (p) {
-    //     ctx.beginPath();
-    //     // ctx.fillStyle/(0,0,0,0.2)
-    //     ctx.arc(p.x+norm_random(10), p.y+norm_random(10), Math.abs(random(15)), Math.PI*norm_random(1), Math.PI * norm_random(2));
-    //     ctx.fill();
+    //fillstyle changing color over time 
 
-    // });
+    if (state === "three") {
+        interpolatedPoints.forEach(function (p) {
+
+
+            ctx.beginPath();
+            ctx.fillStyle = 'rgb(' + (Math.random() * 255 + Math.floor(diffTime)) + ',' +
+                Math.random() * Math.floor(diffTime) + ',' + 255 * Math.floor(diffTime) / 10 + ')';
+            console.log("difftime:", diffTime);
+            ctx.arc(p.x + norm_random(5), p.y + norm_random(5), Math.abs(random(diffTime) * 1.2), Math.PI * norm_random(1), Math.PI * norm_random(2));
+            ctx.fill();
+
+        });
+    }
 
     last_x = x;
     last_y = y;
@@ -197,6 +276,7 @@ function paintMove(x, y) {
 
 function paintEnd(x, y) {
     pushState();
+    diffTime = 0;
 }
 
 canvas.addEventListener("mousedown", function (evt) {
@@ -233,8 +313,8 @@ canvas.addEventListener("touchmove", function (evt) {
 });
 
 canvas.addEventListener("touchend", function (evt) {
-    let x = last_x;
-    let y = last_y;
+    let x = last_x * pixelRatio;
+    let y = last_y * pixelRatio;
     paintEnd(x, y);
 });
 
