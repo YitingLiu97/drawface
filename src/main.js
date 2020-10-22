@@ -291,7 +291,7 @@ canvas.addEventListener("mousedown", function (evt) {
 canvas.addEventListener("touchstart", function (evt) {
     let touches = Array.from(evt.touches);
     let touch = touches[0];
-    paintStart(touch.clientX * pixelRatio, touch.clientY(pixelRatio));
+    paintStart(touch.clientX * pixelRatio, touch.clientY*pixelRatio);
 });
 
 canvas.addEventListener("mousemove", function (evt) {
