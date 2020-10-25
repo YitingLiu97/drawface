@@ -43,9 +43,7 @@ let bgCtx = bgCanvas.getContext("2d");
 let one = document.getElementById("one"); //soft
 let two = document.getElementById("two"); //bold
 let three = document.getElementById("three"); //blah
-let pixel = document.getElementById("pixel");
-let pixelBtn = document.getElementById("pixelBtn");
-let pixelSlider = document.getElementById("pixelSlider");
+
 let time;
 let state = "";
 let colors = document.getElementById("colors");
@@ -84,26 +82,7 @@ function toggleBrushes(){
         brushSelections.style.display = "none";
     }
 }
-pixelBtn.addEventListener("click", togglePixel); //show hide it when other buttons are clicked 
-pixelBtn.addEventListener("touchmove", togglePixel); //show hide it when other buttons are clicked 
 
-function togglePixel() {
-  
-    console.log("clicked on slider")
-    state ="pixel";
-
-    if (pixelSlider.style.display === "none") {
-        pixelSlider.style.display = "block";
-    } else {
-        pixelSlider.style.display = "none";
-    }
-}
-
-window.addEventListener("click",function(){
-    if(state!="pixel"){
-        pixelSlider.style.display = "none";
-     }
-})
 
 //how to keep the drawing without clearing it? - for the pattern canvas 
 let pixelRatio = 1;
@@ -115,15 +94,6 @@ bgCanvas.height = window.innerHeight * pixelRatio;
 patternCanvas.width = window.innerWidth * pixelRatio;
 patternCanvas.height = window.innerHeight * pixelRatio;
 
-function updateSliderVal() {
-    if (pixelRatio >= 0) {
-        pixelRatio = pixelSlider.value;
-        console.log("value: ", pixelRatio);
-        render();
-    }
-}
-
-pixelSlider.addEventListener("change", updateSliderVal);
 let bg = document.getElementById("bg");
 
 let urls = ["/assets/patterns_circle.png", "/assets/patterns_dots.png", "/assets/patterns_fill square.png", "/assets/patterns_spiral.png", "/assets/patterns_square.png", "/assets/patterns_x.png"];
@@ -163,14 +133,11 @@ function render() {
     ctx.fillStyle = pattern;
     ctx.fillRect(0, 0, patternCanvas.width, patternCanvas.height);
 
-
-    // if (state === "colors") {
-
         bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
         bgCtx.fillStyle = bgCol;
         console.log(bgCtx.fillStyle)
         bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-    // }
+
 }
 
 let restore = document.getElementById("undo");
