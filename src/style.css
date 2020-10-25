@@ -98,7 +98,6 @@ button {
     position: absolute;
     /* change the height */
     bottom: 9.5vh;
-
     -webkit-transform: rotate(270deg);
 
 }
@@ -141,6 +140,7 @@ span {
     font-size: 1rem;
     font-family: Arial, Helvetica, sans-serif;
 
+
 }
 
 
@@ -159,7 +159,6 @@ span {
 
 #bgSelections {
     bottom: 9vh;
-    width: 100%;
     position: relative;
     display: none;
     flex-flow: column nowrap;
@@ -168,9 +167,13 @@ span {
     align-content: center;
 }
 
-#bgSelections>button {
+#brushSelections>button {
     width: 100%;
 
+}
+
+#bgSelections>button{
+    width: 100%;
 }
 /* 
 #bgBtn{
@@ -183,9 +186,51 @@ span {
 
 @media only screen and (max-width: 600px) {
 
-
-    span {
-        font-size: 0.5rem;
+    #selections{
+        height: 7vh;
     }
 
+    .btn,
+    #pixel,
+    #background,
+    #brushes,
+    button {
+    
+        text-align: center;
+        border-style: none;
+        width: 200%;
+        height: 7vh;
+    }
+    
+    #brushBtn,#bgBtn{
+        width: 100%;
+        height: 100%;
+        text-align:center;
+    }
+    span {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    #pixelSelection {
+        position: absolute;
+        /* change the height */
+        bottom: 12vh;
+        -webkit-transform: rotate(270deg);
+    
+    }
+
+
+    #brushSelections {
+
+        bottom: 28vh;
+    
+    }
+    
+    #bgSelections {
+        bottom: 21vh;
+
+    }
+
+    
 }

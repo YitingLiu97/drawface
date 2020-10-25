@@ -85,6 +85,7 @@ function toggleBrushes(){
     }
 }
 pixelBtn.addEventListener("click", togglePixel); //show hide it when other buttons are clicked 
+pixelBtn.addEventListener("touchmove", togglePixel); //show hide it when other buttons are clicked 
 
 function togglePixel() {
   
@@ -140,6 +141,7 @@ bg.addEventListener("click", function () {
     render();
 
 });
+let bgCol = `hsl(${Math.random()*255}, 80%, 50%)`;
 
 function render() {
     bgCanvas.width = window.innerWidth * pixelRatio;
@@ -161,6 +163,14 @@ function render() {
     ctx.fillStyle = pattern;
     ctx.fillRect(0, 0, patternCanvas.width, patternCanvas.height);
 
+
+    // if (state === "colors") {
+
+        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+        bgCtx.fillStyle = bgCol;
+        console.log(bgCtx.fillStyle)
+        bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+    // }
 }
 
 let restore = document.getElementById("undo");
@@ -186,11 +196,15 @@ function pushState() {
         undoStack.shift();
     }
 }
-
+//clear all the variables as well 
 clear.addEventListener("click", function () {
+    index=0;
+     bgCol = `white`;
+
+     render();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    patternCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height)
-    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height)
+    // patternCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height)
+    // bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height)
 
 
 })
@@ -221,23 +235,21 @@ two.addEventListener("click", function () {
 three.addEventListener("click", function () {
     state = "three"
 });
+
+
+//event listener should change variable rather than draw 
 colors.addEventListener("click", function () {
     state = "colors";
-    if (state === "colors") {
+    bgCol = `hsl(${Math.random()*255}, 80%, 50%)`;
 
-        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-        bgCtx.fillStyle = `hsl(${Math.random()*255}, 80%, 50%)`;
-        console.log(bgCtx.fillStyle)
-        bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-
-    }
+    render();
 });
 
 download.addEventListener("click", function () {
     state = "download";
     console.log("download!");
     //draw everything onto the bg image and save it 
-    bgCtx.drawImage(canvas, 0, 0)
+    bgCtx.drawImage(canvas, 0, 0);
     bgCanvas.toBlob(function (blob) {
         saveAs(blob, "emojiDrawing.png");
     });
