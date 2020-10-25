@@ -51,7 +51,39 @@ let state = "";
 let colors = document.getElementById("colors");
 let diffTime = 0;
 let clear = document.getElementById("clear");
+let brushBtn = document.getElementById("brushBtn");
+let brushSelections=document.getElementById("brushSelections");
+let bgBtn = document.getElementById("bgBtn");
+let  bgSelections = document.getElementById("bgSelections");
 
+bgBtn.addEventListener("click",toggleBgs);
+
+function toggleBgs(){
+
+    console.log("clicked on bgs")
+    state ="bgs";
+
+    if (bgSelections.style.display === "none") {
+        bgSelections.style.display = "flex";
+    } else {
+        bgSelections.style.display = "none";
+    }
+}
+
+
+brushBtn.addEventListener("click", toggleBrushes);
+
+
+function toggleBrushes(){
+    console.log("clicked on brushes")
+    state ="brush";
+
+    if (brushSelections.style.display === "none") {
+        brushSelections.style.display = "flex";
+    } else {
+        brushSelections.style.display = "none";
+    }
+}
 pixelBtn.addEventListener("click", togglePixel); //show hide it when other buttons are clicked 
 
 function togglePixel() {
