@@ -15,7 +15,7 @@ steps:
 4. line thickness 
 5. undo redo 
 6. pixelation
-7. fill in color within shape 
+7. fill in color within shape - not yet - 10/26/2020
 
 create the color array to choose from - andy warhol style 
 overlay the patterns on top/ overlay? or difference of the background 
@@ -24,7 +24,7 @@ overlay the patterns on top/ overlay? or difference of the background
 
 /*********** 
 questions:
-1. how to create the patterns on top of a colored background
+1. how to create the patterns on top of a colored background - fixed 
 **********/
 
 
@@ -50,16 +50,16 @@ let colors = document.getElementById("colors");
 let diffTime = 0;
 let clear = document.getElementById("clear");
 let brushBtn = document.getElementById("brushBtn");
-let brushSelections=document.getElementById("brushSelections");
+let brushSelections = document.getElementById("brushSelections");
 let bgBtn = document.getElementById("bgBtn");
-let  bgSelections = document.getElementById("bgSelections");
+let bgSelections = document.getElementById("bgSelections");
 
-bgBtn.addEventListener("click",toggleBgs);
+bgBtn.addEventListener("click", toggleBgs);
 
-function toggleBgs(){
+function toggleBgs() {
 
     console.log("clicked on bgs")
-    state ="bgs";
+    state = "bgs";
 
     if (bgSelections.style.display === "none") {
         bgSelections.style.display = "flex";
@@ -72,9 +72,9 @@ function toggleBgs(){
 brushBtn.addEventListener("click", toggleBrushes);
 
 
-function toggleBrushes(){
+function toggleBrushes() {
     console.log("clicked on brushes")
-    state ="brush";
+    state = "brush";
 
     if (brushSelections.style.display === "none") {
         brushSelections.style.display = "flex";
@@ -84,7 +84,7 @@ function toggleBrushes(){
 }
 
 
-//how to keep the drawing without clearing it? - for the pattern canvas 
+//how to keep the drawing without clearing it? - for the pattern canvas - fixed - 10/25/2020
 let pixelRatio = 1;
 
 canvas.width = window.innerWidth * pixelRatio;
@@ -127,16 +127,16 @@ function render() {
     patternCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height);
 
     let image = bgImages[index];
-    //how to make the pattern smaller - same as the pixel ratio?
+    //how to make the pattern smaller - same as the pixel ratio? - not yet fixed - 10/26/2020
     var pattern = patternCtx.createPattern(image, 'repeat');
 
     ctx.fillStyle = pattern;
     ctx.fillRect(0, 0, patternCanvas.width, patternCanvas.height);
 
-        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-        bgCtx.fillStyle = bgCol;
-        console.log(bgCtx.fillStyle)
-        bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+    bgCtx.fillStyle = bgCol;
+    console.log(bgCtx.fillStyle)
+    bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
 
 }
 
@@ -165,13 +165,11 @@ function pushState() {
 }
 //clear all the variables as well 
 clear.addEventListener("click", function () {
-    index=0;
-     bgCol = `white`;
+    index = 0;
+    bgCol = `white`;
 
-     render();
+    render();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // patternCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height)
-    // bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height)
 
 
 })
@@ -229,8 +227,9 @@ function paintMove(x, y) {
     let rate = 20;
     let interpolatedPoints = pointsAlongLine(x, y, last_x, last_y, rate);
 
+    //time determines the colors and size of the brushes 
     let lastTime = new Date();
-    diffTime = (lastTime - time) / 10;
+    diffTime = (lastTime - time) / 10; 
 
     //brush 
     //pink circle with contrasty rect in the center 
@@ -266,7 +265,7 @@ function paintMove(x, y) {
     }
 
     //brush three 
-    // animating the circle when it is drawn - revealing the circle rather than drawing? 
+    // animating the circle when it is drawn - revealing the circle rather than drawing? - not yet - 10/26/2020
     // created soft circles 
     //fillstyle changing color over time 
 
@@ -302,7 +301,7 @@ canvas.addEventListener("mousedown", function (evt) {
 canvas.addEventListener("touchstart", function (evt) {
     let touches = Array.from(evt.touches);
     let touch = touches[0];
-    paintStart(touch.clientX * pixelRatio, touch.clientY*pixelRatio);
+    paintStart(touch.clientX * pixelRatio, touch.clientY * pixelRatio);
 });
 
 canvas.addEventListener("mousemove", function (evt) {
