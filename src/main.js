@@ -43,9 +43,7 @@ let bgCtx = bgCanvas.getContext("2d");
 let one = document.getElementById("one"); //soft
 let two = document.getElementById("two"); //bold
 let three = document.getElementById("three"); //blah
-let pixel = document.getElementById("pixel");
-let pixelBtn = document.getElementById("pixelBtn");
-let pixelSlider = document.getElementById("pixelSlider");
+
 let time;
 let state = "";
 let colors = document.getElementById("colors");
@@ -84,25 +82,7 @@ function toggleBrushes(){
         brushSelections.style.display = "none";
     }
 }
-pixelBtn.addEventListener("click", togglePixel); //show hide it when other buttons are clicked 
 
-function togglePixel() {
-  
-    console.log("clicked on slider")
-    state ="pixel";
-
-    if (pixelSlider.style.display === "none") {
-        pixelSlider.style.display = "block";
-    } else {
-        pixelSlider.style.display = "none";
-    }
-}
-
-window.addEventListener("click",function(){
-    if(state!="pixel"){
-        pixelSlider.style.display = "none";
-     }
-})
 
 //how to keep the drawing without clearing it? - for the pattern canvas 
 let pixelRatio = 1;
@@ -114,15 +94,6 @@ bgCanvas.height = window.innerHeight * pixelRatio;
 patternCanvas.width = window.innerWidth * pixelRatio;
 patternCanvas.height = window.innerHeight * pixelRatio;
 
-function updateSliderVal() {
-    if (pixelRatio >= 0) {
-        pixelRatio = pixelSlider.value;
-        console.log("value: ", pixelRatio);
-        render();
-    }
-}
-
-pixelSlider.addEventListener("change", updateSliderVal);
 let bg = document.getElementById("bg");
 
 let urls = ["/assets/patterns_circle.png", "/assets/patterns_dots.png", "/assets/patterns_fill square.png", "/assets/patterns_spiral.png", "/assets/patterns_square.png", "/assets/patterns_x.png"];
@@ -140,6 +111,7 @@ bg.addEventListener("click", function () {
     render();
 
 });
+let bgCol = `hsl(${Math.random()*255}, 80%, 50%)`;
 
 function render() {
     bgCanvas.width = window.innerWidth * pixelRatio;
@@ -160,6 +132,11 @@ function render() {
 
     ctx.fillStyle = pattern;
     ctx.fillRect(0, 0, patternCanvas.width, patternCanvas.height);
+
+        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+        bgCtx.fillStyle = bgCol;
+        console.log(bgCtx.fillStyle)
+        bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
 
 }
 
@@ -186,11 +163,15 @@ function pushState() {
         undoStack.shift();
     }
 }
-
+//clear all the variables as well 
 clear.addEventListener("click", function () {
+    index=0;
+     bgCol = `white`;
+
+     render();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    patternCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height)
-    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height)
+    // patternCtx.clearRect(0, 0, patternCanvas.width, patternCanvas.height)
+    // bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height)
 
 
 })
@@ -221,23 +202,21 @@ two.addEventListener("click", function () {
 three.addEventListener("click", function () {
     state = "three"
 });
+
+
+//event listener should change variable rather than draw 
 colors.addEventListener("click", function () {
     state = "colors";
-    if (state === "colors") {
+    bgCol = `hsl(${Math.random()*255}, 80%, 50%)`;
 
-        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-        bgCtx.fillStyle = `hsl(${Math.random()*255}, 80%, 50%)`;
-        console.log(bgCtx.fillStyle)
-        bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-
-    }
+    render();
 });
 
 download.addEventListener("click", function () {
     state = "download";
     console.log("download!");
     //draw everything onto the bg image and save it 
-    bgCtx.drawImage(canvas, 0, 0)
+    bgCtx.drawImage(canvas, 0, 0);
     bgCanvas.toBlob(function (blob) {
         saveAs(blob, "emojiDrawing.png");
     });
