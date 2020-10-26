@@ -18,6 +18,9 @@ canvas {
 }
 
 
+/* remember to change the line height and margin top if you change selection height */
+
+/* <selection height - line height)/2 = margin top height  */
 #selections {
     position: fixed;
     bottom: 0;
@@ -78,7 +81,6 @@ button {
 #brushBtn,
 #bgBtn {
     position: relative;
-    border: 1pt red dotted;
   
     
 }
